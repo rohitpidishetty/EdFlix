@@ -23,30 +23,26 @@ public class EdFlix {
     protected FirebaseOptions options;
     protected FirebaseDatabase ref;
 
-    @Value("${DB}")
-    private String credentials;
 
-    EdFlix() {
+     public EdFlix(@Value("${DB}") String credentials) {
+        try (InputStream is = new ByteArrayInputStream(credentials.getBytes(StandardCharsets.UTF_8))) {
 
-        try {
-
-            InputStream is = getClass()
-                    .getClassLoader()
-                    .getResourceAsStream(credentials);
-
-            options = FirebaseOptions.builder()
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(is))
                     .setDatabaseUrl("https://edflix-ittacademy-default-rtdb.firebaseio.com")
                     .build();
 
-            is.close();
-            if (FirebaseApp.getApps().isEmpty())
+            if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
-            this.ref = FirebaseDatabase.getInstance();
-        } catch (Exception e) {
+            }
 
+            this.ref = FirebaseDatabase.getInstance();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Firebase initialization failed", e);
         }
     }
+
 
     @GetMapping("/test")
     public Map<String, String> test() {
