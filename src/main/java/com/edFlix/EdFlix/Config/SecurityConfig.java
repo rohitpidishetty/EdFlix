@@ -19,25 +19,34 @@ public class SecurityConfig {
     http
       .cors(Customizer.withDefaults())
       .csrf(csrf -> csrf.disable())
-      .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+      .authorizeHttpRequests(auth -> auth
+          .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+          .anyRequest().permitAll()
+      );
     return http.build();
   }
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(
-      List.of("https://squash-arch.web.app", "http://localhost:3000")
-    ); // exact origin
+  
+    config.setAllowedOriginPatterns(
+        List.of(
+            "http://localhost:3000",
+            "https://squash-arch.web.app"
+        )
+    );
+  
     config.setAllowedMethods(
-      List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
     );
     config.setAllowedHeaders(List.of("*"));
     config.setExposedHeaders(List.of("Content-Disposition", "Content-Type"));
     config.setAllowCredentials(true);
-    UrlBasedCorsConfigurationSource source =
-      new UrlBasedCorsConfigurationSource();
+  
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);
     return source;
   }
+
 }
