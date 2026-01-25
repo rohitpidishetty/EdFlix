@@ -23,6 +23,7 @@ public class VerifyUser {
     protected static Map<?, ?> data;
 
     public CompletableFuture<Boolean> verify(Map<String, Object> payload, FirebaseDatabase ref) {
+
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         ArrayList<Object> data = (ArrayList<Object>) payload.get("payload");
@@ -50,29 +51,14 @@ public class VerifyUser {
                     return;
                 }
 
-                // Building token
-                StringBuilder stream = new StringBuilder();
-                stream.append(clientEdFlixId).append(":").append(clientEdFlixPw).append(":");
-                for (int i = 1; i < data.size(); i++) stream.append(data.get(i)).append(":");
-
+// Verify token
                 try {
-                    MessageDigest md = MessageDigest.getInstance("SHA-256");
-                    byte[] byteStream = md.digest(stream.toString().getBytes());
-                    StringBuilder hash = new StringBuilder();
-                    for (byte b : byteStream) {
-                        String hex = Integer.toHexString(0xff & b);
-                        if (hex.length() == 1) hash.append('0');
-                        hash.append(hex);
-                    }
-                    String newHash = hash.toString();
+
                     if (userData.get("ssa_token") == null) {
                         future.complete(false);
                         return;
                     }
-                    if (!userData.get("ssa_token").split(":")[0].equals(newHash.split(":")[0])) {
-                        future.complete(false);
-                    }
-                    future.complete(newHash.equals(clientToken));
+                    future.complete(userData.get("ssa_token").equals(data.get(0).toString()));
                 } catch (Exception e) {
                     future.complete(false);
                 }

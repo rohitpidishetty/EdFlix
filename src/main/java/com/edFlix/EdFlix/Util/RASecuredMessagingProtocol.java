@@ -12,7 +12,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Service
 public class RASecuredMessagingProtocol {
 
     // Rohit Acharya's Secured Messaging Protocol (RASMP)

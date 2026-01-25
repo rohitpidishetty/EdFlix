@@ -87,7 +87,7 @@ public class RegisterUser {
             if (cred.get("ssa_token") != null) {
 
                 if (!cred.get("ssa_token").split(":")[0].equals(newHash.split(":")[0])) {
-                    return "-1:Device authentication failed, this device is not registered";
+                    return "-1:Another active session has been detected. Kindly log out from the other device to proceed with this registration.";
                 }
             } else {
                 dbRef.child("ssa_token").setValueAsync(newHash).get();
