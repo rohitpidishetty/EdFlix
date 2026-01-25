@@ -33,7 +33,7 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(
                 List.of(
                         "http://localhost:3000",
-                        "https://edflix-ittacademy.web.app"
+                        "https://squash-arch.web.app"
                 )
         );
 

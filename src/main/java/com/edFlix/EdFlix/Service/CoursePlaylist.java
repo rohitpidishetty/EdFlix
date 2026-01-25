@@ -44,7 +44,7 @@
 //    }
 //
 //    // Generate a SAS URL for a blob
-//    public String video_url(String blobPath) {
+//    public String sas_appended_url(String blobPath) {
 //        int expiryMinutes = 60;
 //
 //        BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
@@ -80,7 +80,7 @@
 //        Map<String, String> lecture = new HashMap<>();
 //        lecture.put("class", classNumber);
 //        lecture.put("topic", topic);
-//        lecture.put("url", video_url(blobPath));
+//        lecture.put("url", sas_appended_url(blobPath));
 //        return lecture;
 //    }
 //
@@ -170,8 +170,6 @@
 //
 //
 
-
-
 package com.edFlix.EdFlix.Service;
 
 import com.azure.storage.blob.BlobContainerClient;
@@ -199,8 +197,6 @@ public class CoursePlaylist {
     private final StorageSharedKeyCredential credential;
     private final BlobServiceClient blobServiceClient;
 
-    private final Map<String, List<Map<String, String>>> courses;
-
     public CoursePlaylist(
             @Value("${ACCOUNT_KEY}") String accountKey,
             @Value("${ACCOUNT_NAME}") String accountName,
@@ -216,18 +212,10 @@ public class CoursePlaylist {
                 .credential(this.credential)
                 .buildClient();
 
-        // Initialize courses AFTER blobServiceClient is ready
-        this.courses = new HashMap<>();
-        this.courses.put("cpl8", Arrays.asList(
-                createLecture("1", "What is programming language ?", "sample/master.m3u8"),
-                createLecture("2", "Why C programming language ?", "sample/master.m3u8"),
-                createLecture("3", "How to declare variables ?", "sample/master.m3u8"),
-                createLecture("4", "How to debug your code ?", "sample/master.m3u8")
-        ));
     }
 
     // Generate a SAS URL for a blob
-    public String video_url(String blobPath) {
+    public String sas_appended_url(String blobPath) {
         int expiryMinutes = 60;
         BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
 
@@ -252,7 +240,7 @@ public class CoursePlaylist {
         Map<String, String> lecture = new HashMap<>();
         lecture.put("class", classNumber);
         lecture.put("topic", topic);
-        lecture.put("url", video_url(blobPath));
+        lecture.put("url", sas_appended_url(blobPath));
         return lecture;
     }
 
@@ -331,10 +319,21 @@ public class CoursePlaylist {
     }
 
     // Public method to get a playlist by course ID
-    public List<Map<String, String>> getPlaylist(String courseId) {
+    public Map<String, Object> getPlaylist(String courseId) {
+        /**
+         * {
+         *      notes_and_source_codes: URL,
+         *      playlist: [...]
+         * }
+         * */
+
+        Map<String, Object> payload = new HashMap<>();
+
         if ("jpl3".equals(courseId)) {
-            return javaPlayList();
+            payload.put("notes_and_source_codes", sas_appended_url("notes/notes-and-programs.tar.sq"));
+            payload.put("playlist", javaPlayList());
+            return payload;
         }
-        return courses.get(courseId);
+        return null;
     }
 }

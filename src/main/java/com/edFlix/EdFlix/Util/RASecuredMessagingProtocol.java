@@ -1,5 +1,6 @@
 package com.edFlix.EdFlix.Util;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -11,7 +12,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@Component
 public class RASecuredMessagingProtocol {
 
     // Rohit Acharya's Secured Messaging Protocol (RASMP)

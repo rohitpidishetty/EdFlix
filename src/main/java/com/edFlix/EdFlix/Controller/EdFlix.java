@@ -138,11 +138,12 @@ public class EdFlix {
   }
 
   @PostMapping("/course")
-  public Map<String, List<Map<String, String>>> getCourse(
+  public Map<String,  Map<String, Object>> getCourse(
     @RequestBody Map<String, Object> payload
   ) {
     CompletableFuture<List<String>> future;
     boolean result = false;
+    @SuppressWarnings("unchecked")
     Map<String, Object> _payload_ = (Map<String, Object>) payload.get(
       "payload"
     );
@@ -167,6 +168,7 @@ public class EdFlix {
         String playlist = (String) _payload_.get("request");
 
         //                Check if user is enrolled in this course.
+          @SuppressWarnings("unchecked")
         Boolean cf = uec
           .isEnrolled(
             playlist,
