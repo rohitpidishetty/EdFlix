@@ -319,7 +319,7 @@ public class CoursePlaylist {
     }
 
     // Public method to get a playlist by course ID
-    public Map<String, Object> getPlaylist(String courseId) {
+    public Map<String, Object> getPlaylist(String courseId, String courseTimeOutAt) {
         /**
          * {
          *      notes_and_source_codes: URL,
@@ -332,6 +332,7 @@ public class CoursePlaylist {
         if ("jpl3".equals(courseId)) {
             payload.put("notes_and_source_codes", sas_appended_url("notes/notes-and-programs.tar.sq"));
             payload.put("playlist", javaPlayList());
+            payload.put("courseTimeOutAt", courseTimeOutAt);
             return payload;
         }
         return null;

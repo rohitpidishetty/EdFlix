@@ -174,7 +174,7 @@ public class EdFlix {
 
                 //                Check if user is enrolled in this course.
                 @SuppressWarnings("unchecked")
-                Boolean cf = uec
+                String cf = uec
                         .isEnrolled(
                                 playlist,
                                 this.ref,
@@ -183,7 +183,7 @@ public class EdFlix {
                         .get();
                 return new HashMap<>() {
                     {
-                        put("Stream", (cf ? cp.getPlaylist(playlist) : null));
+                        put("Stream", (cf.startsWith("accessible") ? cp.getPlaylist(playlist, cf) : null));
                     }
                 };
             } else {

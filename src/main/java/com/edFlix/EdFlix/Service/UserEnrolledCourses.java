@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,25 +48,32 @@ public class UserEnrolledCourses {
         return future;
     }
 
-    public CompletableFuture<Boolean> isEnrolled(String cid, FirebaseDatabase ref, ArrayList<String> uid) {
+    public CompletableFuture<String> isEnrolled(String cid, FirebaseDatabase ref, ArrayList<String> uid) {
 
         String UID = ra_smp.decrypt(uid.get(0).split(":")[1]);
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        CompletableFuture<String> future = new CompletableFuture<>();
         DatabaseReference dbRef = ref.getReference("/").child(UID.substring(0, UID.indexOf("@")));
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    Map<?, ?> data2 = (Map<?, ?>) ((Map<?, ?>) dataSnapshot.getValue()).get("course-access");
+                    if (data2.containsKey(cid)) {
+                        if (new Date().getTime() <= (long) data2.get(cid)) {
 
-                    Map<?, ?> data = (Map<?, ?>) dataSnapshot.getValue();
-                    Map<?, ?> data2 = (Map<?, ?>) data.get("course-access");
-                    future.complete(data2.keySet().contains(cid));
+                            future.complete("accessible:" + data2.get(cid));
+                         
+                        } else {
+                            future.complete("course_timed_out");
+                        }
+                    }
+
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                future.complete(false);
+                future.complete("unregistered");
             }
         });
         return future;
