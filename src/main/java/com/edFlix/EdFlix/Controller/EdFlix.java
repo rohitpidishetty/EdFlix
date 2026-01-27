@@ -72,6 +72,8 @@ public class EdFlix {
     @Autowired
     private TermiateSession terminator;
 
+
+
     @PostMapping("/register_user")
     public Map<String, String> registerUser(
             @RequestBody Map<String, Object> payload
@@ -81,7 +83,7 @@ public class EdFlix {
         //        SSAT
         return new HashMap<>() {
             {
-                put("token", signedSecuredAccessToken);
+                put("token", signedSecuredAccessToken + ver.delimeter);
             }
         };
     }
@@ -204,7 +206,7 @@ public class EdFlix {
         }
     }
 
-    @PostMapping("terminate_session")
+    @PostMapping("/terminate_session")
     public void termiateSession(@RequestBody String payload) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         System.out.println(payload);

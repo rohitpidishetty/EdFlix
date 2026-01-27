@@ -1,5 +1,6 @@
 package com.edFlix.EdFlix.Service;
 
+import com.edFlix.EdFlix.Controller.EdFlix;
 import com.edFlix.EdFlix.Util.RASecuredMessagingProtocol;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
@@ -22,12 +23,14 @@ public class VerifyUser {
 
     protected static Map<?, ?> data;
 
+    public final String delimeter = "          "; // 10 spaces, to make sure the session token is not tampered
+
     public CompletableFuture<Boolean> verify(Map<String, Object> payload, FirebaseDatabase ref) {
 
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         ArrayList<Object> data = (ArrayList<Object>) payload.get("payload");
-        String[] client = data.get(0).toString().split(":");
+        String[] client = (data.get(0).toString() + this.delimeter).split(":");
         String clientToken = client[0], clientEdFlixId = ra_smp.decrypt(client[1]), clientEdFlixPw = ra_smp.decrypt(client[2]);
 
         if (!clientEdFlixId.contains("@")) {
