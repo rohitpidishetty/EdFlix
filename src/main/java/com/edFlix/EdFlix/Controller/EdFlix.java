@@ -72,8 +72,6 @@ public class EdFlix {
     @Autowired
     private TermiateSession terminator;
 
-
-
     @PostMapping("/register_user")
     public Map<String, String> registerUser(
             @RequestBody Map<String, Object> payload
@@ -154,6 +152,7 @@ public class EdFlix {
         Map<String, Object> _payload_ = (Map<String, Object>) payload.get(
                 "payload"
         );
+        System.out.println(_payload_);
         try {
             result = ver
                     .verify(
@@ -174,7 +173,7 @@ public class EdFlix {
 
                 String playlist = (String) _payload_.get("request");
 
-                //                Check if user is enrolled in this course.
+                // Check if user is enrolled in this course.
                 @SuppressWarnings("unchecked")
                 String cf = uec
                         .isEnrolled(
@@ -185,7 +184,7 @@ public class EdFlix {
                         .get();
                 return new HashMap<>() {
                     {
-                        put("Stream", (cf.startsWith("accessible") ? cp.getPlaylist(playlist, cf) : null));
+                        put("Stream", (cf.startsWith("accessible") ? cp.getPlaylist(playlist, cf, (int) _payload_.get("loadContent")) : null));
                     }
                 };
             } else {

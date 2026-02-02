@@ -33,7 +33,8 @@ public class VerifyUser {
         String[] client = (data.get(0).toString() + this.delimeter).split(":");
         String clientToken = client[0], clientEdFlixId = ra_smp.decrypt(client[1]), clientEdFlixPw = ra_smp.decrypt(client[2]);
 
-        if (!clientEdFlixId.contains("@")) {
+
+        if (!clientEdFlixId.contains("@") || !clientEdFlixId.equals(data.get(1))) {
             future.complete(false);
             return future;
         }

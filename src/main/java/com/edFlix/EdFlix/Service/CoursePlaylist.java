@@ -319,7 +319,7 @@ public class CoursePlaylist {
     }
 
     // Public method to get a playlist by course ID
-    public Map<String, Object> getPlaylist(String courseId, String courseTimeOutAt) {
+    public Map<String, Object> getPlaylist(String courseId, String courseTimeOutAt, int load) {
         /**
          * {
          *      notes_and_source_codes: URL,
@@ -331,7 +331,9 @@ public class CoursePlaylist {
 
         if ("jpl3".equals(courseId)) {
             payload.put("notes_and_source_codes", sas_appended_url("notes/notes-and-programs.tar.sq"));
-            payload.put("playlist", javaPlayList());
+            int size = javaPlayList().size();
+//            System.out.println(Math.min(load - 15, size) + " , " + Math.min(load, size));
+            payload.put("playlist", javaPlayList().subList(Math.min(load - 15, size), Math.min(load, size)));
             payload.put("courseTimeOutAt", courseTimeOutAt);
             return payload;
         }
