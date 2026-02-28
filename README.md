@@ -3,4 +3,4 @@ FFmpeg is used to convert streams into .m3u8 files
 All files uploaded to Azure
 Serving videos using HLS protocol, Adaptive Bitrate.
 
-I was protityping with C# and Java, but finally chosed to continue developing in Java because of the RASMP inspired SSA token. This modeul has been written completely in Java. I'll be re-writing the module in C# asap, and will switch to C# after rigorous testing & validation.
+I initially prototyped EdFlix in both C# and Java, but continued full development in Java because the RASMP-inspired SSA module was fully implemented in Java and tightly integrated with the backend. I am now re-writing this module in C# and plan to switch to C# after rigorous testing and validation.
