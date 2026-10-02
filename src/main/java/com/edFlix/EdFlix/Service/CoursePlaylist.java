@@ -18,6 +18,8 @@ import java.util.*;
 @CrossOrigin
 public class CoursePlaylist {
 
+//    Migration from azure to aws s3 buckets
+
     private final String accountKey;
     private final String accountName;
     private final String containerName;
