@@ -90,7 +90,7 @@ public final class Playlist {
 
 
         String url = UriComponentsBuilder
-            .fromUriString("http://localhost:8080/api/hls/playlist")
+            .fromUriString("https://3-139-72-215.sslip.io/api/hls/playlist")
             .queryParam("key", key)
             .build()
             .encode()
