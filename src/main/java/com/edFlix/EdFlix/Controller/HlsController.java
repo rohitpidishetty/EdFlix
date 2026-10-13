@@ -137,7 +137,7 @@ public class HlsController {
     if (key.endsWith(".m3u8")) {
 
       return UriComponentsBuilder
-          .fromUriString("http://localhost:8080/api/hls/playlist")
+          .fromUriString("https://3-139-72-215.sslip.io/api/hls/playlist")
           .queryParam("key", key)
           .build()
           .encode()
